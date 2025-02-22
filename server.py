@@ -8,6 +8,14 @@ from hezarfen_ai.model import ModelLoader
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Tüm kaynaklara izin verir
+    allow_credentials=True,
+    allow_methods=["*"],  # Tüm HTTP metodlarına izin verir (GET, POST, PUT, DELETE vs.)
+    allow_headers=["*"],  # Tüm header'lara izin verir
+)
+
 model_loader = ModelLoader()
 
 @app.post("/v1/hezarfen/fake-news-checker")
