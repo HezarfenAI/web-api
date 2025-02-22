@@ -5,6 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from fastapi import FastAPI
 from hezarfen_ai.model import ModelLoader
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
