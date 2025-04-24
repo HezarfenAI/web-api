@@ -5,8 +5,8 @@ from infrastructure.db.repository.train_repository import TrainRepository
 from application.dtos.requests.add_data_dto import AddDataRequestDto
 
 class AIServices:
-    def __init__(self,):
-        self.session = SessionLocal()
+    def __init__(self, session):
+        self.session = session
         self.model_loader = ModelLoader(
             model_path="outputs/hezarfen.pkg",
             dataset_file="datasets/turkish_news.csv",
