@@ -2,9 +2,10 @@ from fastapi import APIRouter
 from application.dtos.requests.add_data_dto import AddDataRequestDto
 from application.dtos.requests.predict_request_dto import PredictRequestDto
 from application.services.ai_services import AIServices
+from infrastructure.db.database import SessionLocal
 
 router = APIRouter(prefix="/ai", tags=["AI"])
-ai_services = AIServices()
+ai_services = AIServices(SessionLocal())
 
 @router.post("/predict")
 def predict(data: PredictRequestDto):

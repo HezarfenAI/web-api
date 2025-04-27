@@ -1,4 +1,4 @@
-from db.repository.base import BaseRepository
+from .base import BaseRepository
 from domain.common.user import User
 
 class UserRepository(BaseRepository):
