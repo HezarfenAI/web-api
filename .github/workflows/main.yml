@@ -28,7 +28,7 @@ jobs:
             set -e  # hata olursa durdur
 
             echo "Pulling latest code..."
-            cd /home/designcise
+            cd Teknofest/web-api
             git pull origin main
 
             echo "Stopping and removing old container (if exists)..."
