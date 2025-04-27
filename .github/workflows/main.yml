@@ -1,4 +1,5 @@
 name: Deployment Workflow
+
 on:
   push:
     branches:
@@ -12,14 +13,34 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          printf "%s" "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          ssh-keyscan -H 185.233.164.103 >> ~/.ssh/known_hosts
+
       - name: Deploy to server
         run: |
           echo "Starting deployment..."
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no root@185.233.164.103 "cd /home/designcise && git pull origin main && docker build -t web-api ."
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no root@185.233.164.103 << 'EOF'
+            set -e  # hata olursa durdur
+
+            echo "Pulling latest code..."
+            cd /home/designcise
+            git pull origin main
+
+            echo "Stopping and removing old container (if exists)..."
+            docker stop web-api-container || true
+            docker rm web-api-container || true
+
+            echo "Building new Docker image..."
+            docker build -t web-api .
+
+            echo "Running new container..."
+            docker run -d --name web-api-container -p 8000:8000 web-api
+
+            echo "Deployment successful!"
+          EOF
           echo "Deployment completed."
